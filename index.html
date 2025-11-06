@@ -239,7 +239,78 @@
                         <div class="price-label">Total Price</div>
                         <div class="price-value" id="total-price">$0</div>
                     </div>
-                    <button type="submit" class="btn-primary btn-large">Confirm Booking</button>
+                    <button type="submit" class="btn-primary btn-large">Continue to Payment</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Payment Section -->
+    <section id="payment" class="payment" style="display: none;">
+        <div class="container">
+            <h2 class="section-title">Payment</h2>
+            <p class="section-subtitle">Complete Your Booking</p>
+            <div class="payment-form-container">
+                <div class="payment-summary">
+                    <h3>Booking Summary</h3>
+                    <div class="summary-item">
+                        <span class="summary-label">Destination:</span>
+                        <span id="summary-destination" class="summary-value">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Check-In:</span>
+                        <span id="summary-checkin" class="summary-value">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Check-Out:</span>
+                        <span id="summary-checkout" class="summary-value">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Travelers:</span>
+                        <span id="summary-travelers" class="summary-value">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Cabin Class:</span>
+                        <span id="summary-class" class="summary-value">-</span>
+                    </div>
+                    <div class="summary-total">
+                        <span class="summary-label">Total Amount:</span>
+                        <span id="summary-total" class="summary-value">$0</span>
+                    </div>
+                </div>
+                <form id="payment-form" class="payment-form">
+                    <div class="payment-method">
+                        <h3>Payment Method</h3>
+                        <div class="payment-option selected">
+                            <div class="payment-icon"></div>
+                            <span>Credit / Debit Card</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="card-number">Card Number</label>
+                        <input type="text" id="card-number" name="card-number" placeholder="1234 5678 9012 3456" maxlength="19" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="card-name">Cardholder Name</label>
+                        <input type="text" id="card-name" name="card-name" placeholder="John Doe" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="card-expiry">Expiry Date</label>
+                            <div class="date-input-wrapper">
+                                <input type="text" id="card-expiry" name="card-expiry" placeholder="MM/YY" maxlength="5" required>
+                                <button type="button" class="calendar-trigger" data-target="expiry">
+                                    <span class="calendar-icon"></span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="card-cvv">CVV</label>
+                            <input type="text" id="card-cvv" name="card-cvv" placeholder="123" maxlength="4" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-primary btn-large">Proceed</button>
+                    <button type="button" class="btn-secondary btn-large" onclick="goBackToBooking()">Back to Booking</button>
                 </form>
             </div>
         </div>
@@ -409,6 +480,21 @@
                     </div>
                 </div>
                 <button type="button" class="btn-secondary" id="calendar-clear">Clear</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Expiry Date Calendar Modal -->
+    <div id="expiry-calendar-modal" class="modal calendar-modal expiry-calendar-modal">
+        <div class="modal-content calendar-modal-content">
+            <span class="modal-close expiry-calendar-close">&times;</span>
+            <h3 id="expiry-month-year" class="calendar-month-year" style="text-align: center; margin-bottom: 1.5rem;">Select Month & Year</h3>
+            <div class="expiry-calendar-grid">
+                <div class="expiry-month-grid" id="expiry-month-grid"></div>
+                <div class="expiry-year-grid" id="expiry-year-grid"></div>
+            </div>
+            <div class="calendar-footer">
+                <button type="button" class="btn-secondary" id="expiry-calendar-clear">Clear</button>
             </div>
         </div>
     </div>
