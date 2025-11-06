@@ -128,6 +128,10 @@ const travelersInput = document.getElementById('travelers');
 const cabinClassSelect = document.getElementById('cabin-class');
 const totalPriceDisplay = document.getElementById('total-price');
 
+// Calendar date selection variables (declared globally for calculatePrice access)
+let selectedCheckIn = null;
+let selectedCheckOut = null;
+
 // Base prices per person per night
 const basePrices = {
     luna: 1200,
@@ -144,25 +148,50 @@ const classMultipliers = {
 
 // Calculate total price
 function calculatePrice() {
-    const destination = destinationSelect.value;
-    const travelers = parseInt(travelersInput.value) || 1;
-    const cabinClass = cabinClassSelect.value;
+    if (!totalPriceDisplay) {
+        console.log('totalPriceDisplay not found');
+        return 0;
+    }
     
-    // Get dates from calendar selection or hidden inputs
-    let checkInDate, checkOutDate;
+    const destination = destinationSelect ? destinationSelect.value : '';
+    const travelers = travelersInput ? parseInt(travelersInput.value) || 1 : 1;
+    const cabinClass = cabinClassSelect ? cabinClassSelect.value : 'standard';
     
+    // Get dates - prioritize calendar selection, then fall back to inputs
+    let checkInDate = null;
+    let checkOutDate = null;
+    
+    // Try calendar dates first
     if (selectedCheckIn && selectedCheckOut) {
         checkInDate = new Date(selectedCheckIn);
         checkOutDate = new Date(selectedCheckOut);
-    } else if (checkinInput && checkoutInput && checkinInput.value && checkoutInput.value) {
+    }
+    // Fall back to input values
+    else if (checkinInput && checkoutInput && checkinInput.value && checkoutInput.value) {
         checkInDate = new Date(checkinInput.value);
         checkOutDate = new Date(checkoutInput.value);
-    } else {
+    }
+    
+    // If no dates, show $0
+    if (!checkInDate || !checkOutDate) {
         totalPriceDisplay.textContent = '$0';
         return 0;
     }
     
-    if (!destination || !checkInDate || !checkOutDate || checkInDate >= checkOutDate) {
+    // Validate dates
+    if (isNaN(checkInDate.getTime()) || isNaN(checkOutDate.getTime())) {
+        totalPriceDisplay.textContent = '$0';
+        return 0;
+    }
+    
+    // Check if destination is selected
+    if (!destination) {
+        totalPriceDisplay.textContent = '$0';
+        return 0;
+    }
+    
+    // Check if check-out is after check-in
+    if (checkInDate >= checkOutDate) {
         totalPriceDisplay.textContent = '$0';
         return 0;
     }
@@ -170,11 +199,20 @@ function calculatePrice() {
     // Calculate number of nights
     const nights = Math.ceil((checkOutDate - checkInDate) / (1000 * 60 * 60 * 24));
     
+    if (nights <= 0) {
+        totalPriceDisplay.textContent = '$0';
+        return 0;
+    }
+    
     // Get base price
     const basePrice = basePrices[destination];
+    if (!basePrice) {
+        totalPriceDisplay.textContent = '$0';
+        return 0;
+    }
     
     // Get multiplier
-    const multiplier = classMultipliers[cabinClass];
+    const multiplier = classMultipliers[cabinClass] || 1.0;
     
     // Calculate total
     const total = nights * travelers * basePrice * multiplier;
@@ -188,8 +226,12 @@ function calculatePrice() {
 // Add event listeners for real-time calculation
 [destinationSelect, checkinInput, checkoutInput, travelersInput, cabinClassSelect].forEach(element => {
     if (element) {
-        element.addEventListener('change', calculatePrice);
-        element.addEventListener('input', calculatePrice);
+        element.addEventListener('change', function() {
+            setTimeout(() => calculatePrice(), 50);
+        });
+        element.addEventListener('input', function() {
+            setTimeout(() => calculatePrice(), 50);
+        });
     }
 });
 
@@ -218,11 +260,77 @@ if (bookingForm) {
             return;
         }
         
+        // Update payment summary
+        updatePaymentSummary();
+        
+        // Hide booking section and show payment section
+        const bookingSection = document.getElementById('booking');
+        const paymentSection = document.getElementById('payment');
+        
+        if (bookingSection && paymentSection) {
+            bookingSection.style.display = 'none';
+            paymentSection.style.display = 'block';
+            paymentSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    });
+}
+
+// Update Payment Summary
+function updatePaymentSummary() {
+    const destination = destinationSelect ? destinationSelect.options[destinationSelect.selectedIndex]?.text : '-';
+    const checkin = selectedCheckIn ? formatDateDisplay(new Date(selectedCheckIn)) : (checkinInput?.value || '-');
+    const checkout = selectedCheckOut ? formatDateDisplay(new Date(selectedCheckOut)) : (checkoutInput?.value || '-');
+    const travelers = travelersInput ? travelersInput.value : '1';
+    const cabinClass = cabinClassSelect ? cabinClassSelect.options[cabinClassSelect.selectedIndex]?.text : '-';
+    const total = calculatePrice();
+    
+    if (document.getElementById('summary-destination')) {
+        document.getElementById('summary-destination').textContent = destination || '-';
+    }
+    if (document.getElementById('summary-checkin')) {
+        document.getElementById('summary-checkin').textContent = checkin;
+    }
+    if (document.getElementById('summary-checkout')) {
+        document.getElementById('summary-checkout').textContent = checkout;
+    }
+    if (document.getElementById('summary-travelers')) {
+        document.getElementById('summary-travelers').textContent = travelers;
+    }
+    if (document.getElementById('summary-class')) {
+        document.getElementById('summary-class').textContent = cabinClass || '-';
+    }
+    if (document.getElementById('summary-total')) {
+        document.getElementById('summary-total').textContent = `$${total.toLocaleString()}`;
+    }
+}
+
+// Go Back to Booking
+function goBackToBooking() {
+    const bookingSection = document.getElementById('booking');
+    const paymentSection = document.getElementById('payment');
+    
+    if (bookingSection && paymentSection) {
+        paymentSection.style.display = 'none';
+        bookingSection.style.display = 'block';
+        bookingSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+}
+
+// Payment Form Submission
+const paymentForm = document.getElementById('payment-form');
+if (paymentForm) {
+    paymentForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const total = calculatePrice();
+        
         // Show confirmation
         alert(`Booking Confirmed!\n\nThank you for choosing AstroStay. Your reservation has been processed.\n\nTotal: $${total.toLocaleString()}\n\nWe'll send you a confirmation email shortly.`);
         
-        // Reset form
-        bookingForm.reset();
+        // Reset booking form
+        if (bookingForm) {
+            bookingForm.reset();
+        }
         totalPriceDisplay.textContent = '$0';
         
         // Reset destination cards
@@ -240,6 +348,176 @@ if (bookingForm) {
             document.getElementById('checkout-display').value = '';
         }
         updateNightsDisplay();
+        
+        // Reset payment form
+        paymentForm.reset();
+        
+        // Go back to booking section
+        goBackToBooking();
+    });
+}
+
+// Card Number Formatting
+const cardNumberInput = document.getElementById('card-number');
+if (cardNumberInput) {
+    cardNumberInput.addEventListener('input', function(e) {
+        let value = e.target.value.replace(/\s/g, '');
+        let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
+        if (formattedValue.length <= 19) {
+            e.target.value = formattedValue;
+        }
+    });
+}
+
+// Expiry Date Formatting & Calendar
+const cardExpiryInput = document.getElementById('card-expiry');
+const expiryCalendarModal = document.getElementById('expiry-calendar-modal');
+const expiryMonthGrid = document.getElementById('expiry-month-grid');
+const expiryYearGrid = document.getElementById('expiry-year-grid');
+const expiryClose = document.querySelector('.expiry-calendar-close');
+const expiryClearBtn = document.getElementById('expiry-calendar-clear');
+
+let selectedExpiryMonth = null;
+let selectedExpiryYear = null;
+
+if (cardExpiryInput) {
+    // Auto-formatting: Add / after 2 digits
+    cardExpiryInput.addEventListener('input', function(e) {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length >= 2) {
+            value = value.substring(0, 2) + '/' + value.substring(2, 4);
+        }
+        e.target.value = value;
+    });
+    
+    // Click to open calendar
+    cardExpiryInput.addEventListener('click', function() {
+        openExpiryCalendar();
+    });
+}
+
+// Expiry Calendar Functions
+function openExpiryCalendar() {
+    if (expiryCalendarModal) {
+        expiryCalendarModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        renderExpiryCalendar();
+    }
+}
+
+function closeExpiryCalendar() {
+    if (expiryCalendarModal) {
+        expiryCalendarModal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+}
+
+function renderExpiryCalendar() {
+    if (!expiryMonthGrid || !expiryYearGrid) return;
+    
+    // Clear grids
+    expiryMonthGrid.innerHTML = '';
+    expiryYearGrid.innerHTML = '';
+    
+    // Month names
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    
+    // Render months
+    monthNames.forEach((month, index) => {
+        const monthBtn = document.createElement('div');
+        monthBtn.className = 'expiry-option';
+        if (selectedExpiryMonth === index + 1) {
+            monthBtn.classList.add('selected');
+        }
+        monthBtn.textContent = month;
+        monthBtn.addEventListener('click', function() {
+            document.querySelectorAll('#expiry-month-grid .expiry-option').forEach(btn => btn.classList.remove('selected'));
+            this.classList.add('selected');
+            selectedExpiryMonth = index + 1;
+            updateExpiryDisplay();
+        });
+        expiryMonthGrid.appendChild(monthBtn);
+    });
+    
+    // Render years (current year to +10 years)
+    const currentYear = new Date().getFullYear();
+    for (let year = currentYear; year <= currentYear + 10; year++) {
+        const yearBtn = document.createElement('div');
+        yearBtn.className = 'expiry-option';
+        if (selectedExpiryYear === year) {
+            yearBtn.classList.add('selected');
+        }
+        yearBtn.textContent = year.toString().substring(2); // Show YY format
+        yearBtn.addEventListener('click', function() {
+            document.querySelectorAll('#expiry-year-grid .expiry-option').forEach(btn => btn.classList.remove('selected'));
+            this.classList.add('selected');
+            selectedExpiryYear = parseInt('20' + this.textContent);
+            updateExpiryDisplay();
+        });
+        expiryYearGrid.appendChild(yearBtn);
+    }
+}
+
+function updateExpiryDisplay() {
+    if (selectedExpiryMonth && selectedExpiryYear) {
+        const month = String(selectedExpiryMonth).padStart(2, '0');
+        const year = String(selectedExpiryYear).substring(2);
+        if (cardExpiryInput) {
+            cardExpiryInput.value = `${month}/${year}`;
+        }
+        // Auto-close after selection
+        setTimeout(() => {
+            closeExpiryCalendar();
+        }, 300);
+    }
+}
+
+// Expiry Calendar Event Listeners
+if (expiryClose) {
+    expiryClose.addEventListener('click', closeExpiryCalendar);
+}
+
+if (expiryCalendarModal) {
+    expiryCalendarModal.addEventListener('click', function(e) {
+        if (e.target === expiryCalendarModal) {
+            closeExpiryCalendar();
+        }
+    });
+}
+
+if (expiryClearBtn) {
+    expiryClearBtn.addEventListener('click', function() {
+        selectedExpiryMonth = null;
+        selectedExpiryYear = null;
+        if (cardExpiryInput) {
+            cardExpiryInput.value = '';
+        }
+        renderExpiryCalendar();
+    });
+}
+
+// Expiry calendar trigger button
+const expiryCalendarTrigger = document.querySelector('.calendar-trigger[data-target="expiry"]');
+if (expiryCalendarTrigger) {
+    expiryCalendarTrigger.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        openExpiryCalendar();
+    });
+}
+
+// Keyboard navigation for expiry calendar
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && expiryCalendarModal && expiryCalendarModal.classList.contains('active')) {
+        closeExpiryCalendar();
+    }
+});
+
+// CVV - Only Numbers
+const cardCvvInput = document.getElementById('card-cvv');
+if (cardCvvInput) {
+    cardCvvInput.addEventListener('input', function(e) {
+        e.target.value = e.target.value.replace(/\D/g, '');
     });
 }
 
@@ -361,6 +639,11 @@ window.addEventListener('DOMContentLoaded', function() {
     
     // Initialize booking form enhancements
     initBookingForm();
+    
+    // Force initial price calculation after everything loads
+    setTimeout(() => {
+        calculatePrice();
+    }, 1000);
 });
 
 // ============================================
@@ -662,8 +945,13 @@ function initBookingForm() {
             const destination = this.getAttribute('data-destination');
             if (destinationSelect) {
                 destinationSelect.value = destination;
-                calculatePrice();
+                // Trigger change event to ensure calculatePrice is called
+                destinationSelect.dispatchEvent(new Event('change', { bubbles: true }));
             }
+            // Calculate price immediately
+            setTimeout(() => {
+                calculatePrice();
+            }, 50);
         });
     });
     
@@ -682,8 +970,7 @@ const calendarClearBtn = document.getElementById('calendar-clear');
 
 let currentCalendarDate = new Date();
 let currentCalendarTarget = null; // 'checkin' or 'checkout'
-let selectedCheckIn = null;
-let selectedCheckOut = null;
+// Note: selectedCheckIn and selectedCheckOut are declared at top level
 
 function initCalendar() {
     // Calendar trigger buttons
@@ -879,13 +1166,11 @@ function selectDate(date) {
             }
         }
         
-        // Auto-advance to checkout if check-in is selected
+        // Switch to checkout mode but stay on same month
         setTimeout(() => {
             if (selectedCheckIn && !selectedCheckOut) {
                 currentCalendarTarget = 'checkout';
-                const nextMonth = new Date(date);
-                nextMonth.setMonth(nextMonth.getMonth() + 1);
-                currentCalendarDate = nextMonth;
+                // Keep same month, don't auto-advance
                 renderCalendar();
             } else {
                 closeCalendar();
@@ -908,7 +1193,10 @@ function selectDate(date) {
     
     renderCalendar();
     updateNightsDisplay();
-    calculatePrice();
+    // Calculate price after date selection
+    setTimeout(() => {
+        calculatePrice();
+    }, 100);
 }
 
 function dateToString(date) {
