@@ -1075,6 +1075,208 @@ section {
     background: rgba(255, 255, 255, 0.15);
 }
 
+/* Expiry Calendar */
+.expiry-calendar-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.expiry-month-grid,
+.expiry-year-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+}
+
+.expiry-option {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.8);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.expiry-option:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: scale(1.05);
+}
+
+.expiry-option.selected {
+    background: var(--primary-white);
+    color: #000;
+    border-color: var(--primary-white);
+    font-weight: 700;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+}
+
+.expiry-calendar-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 10;
+}
+
+/* Payment Section */
+.payment {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.payment-form-container {
+    max-width: 900px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 2rem;
+}
+
+.payment-summary {
+    background: var(--glass-bg);
+    backdrop-filter: blur(15px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 2rem;
+    height: fit-content;
+}
+
+.payment-summary h3 {
+    font-family: var(--font-primary);
+    font-size: 1.5rem;
+    color: var(--primary-white);
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.summary-item:last-of-type {
+    border-bottom: none;
+}
+
+.summary-label {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+}
+
+.summary-value {
+    color: var(--primary-white);
+    font-weight: 600;
+    font-family: var(--font-primary);
+}
+
+.summary-total {
+    display: flex;
+    justify-content: space-between;
+    padding: 1.5rem 0 0;
+    margin-top: 1rem;
+    border-top: 2px solid var(--primary-white);
+}
+
+.summary-total .summary-label {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--primary-white);
+    font-family: var(--font-primary);
+}
+
+.summary-total .summary-value {
+    font-size: 1.5rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--primary-white), var(--primary-light));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.payment-form {
+    background: var(--glass-bg);
+    backdrop-filter: blur(15px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 3rem;
+    box-shadow: 0 0 40px rgba(255, 255, 255, 0.05);
+}
+
+.payment-method {
+    margin-bottom: 2rem;
+}
+
+.payment-method h3 {
+    font-family: var(--font-primary);
+    font-size: 1.2rem;
+    color: var(--primary-white);
+    margin-bottom: 1rem;
+}
+
+.payment-option {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid var(--glass-border);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.payment-option.selected {
+    border-color: var(--primary-white);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.payment-icon {
+    width: 40px;
+    height: 30px;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.05);
+    position: relative;
+}
+
+.payment-icon::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 1px;
+}
+
+.payment-icon::after {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    width: 8px;
+    height: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+}
+
+.payment-option span {
+    color: var(--primary-white);
+    font-weight: 600;
+}
+
 .form-group {
     margin-bottom: 1.5rem;
 }
@@ -1849,6 +2051,14 @@ section {
 
     .calendar-day {
         font-size: 0.85rem;
+    }
+
+    .payment-form-container {
+        grid-template-columns: 1fr;
+    }
+
+    .expiry-calendar-grid {
+        grid-template-columns: 1fr;
     }
 }
 
