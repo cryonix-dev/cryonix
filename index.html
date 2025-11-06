@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AstroStay - Premium Interplanetary Travel</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Animated Starfield Background -->
+    <canvas id="starfield"></canvas>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">AstroStay</div>
+            <ul class="nav-menu">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#destinations">Destinations</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#booking">Book Now</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <div class="floating-astronaut"></div>
+            <div class="floating-planet planet-1"></div>
+            <div class="floating-planet planet-2"></div>
+            <h1 class="hero-title">
+                <span class="glow-text">The Future of Travel is Out of This World.</span>
+            </h1>
+            <p class="hero-subtitle">Book Your Stay Beyond Earth.</p>
+            <div class="hero-buttons">
+                <button class="btn-primary" onclick="scrollToBooking()">Book Now</button>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <div class="mouse"></div>
+        </div>
+    </section>
+
+    <!-- Destinations Section -->
+    <section id="destinations" class="destinations">
+        <div class="container">
+            <h2 class="section-title">Explore the Cosmos</h2>
+            <p class="section-subtitle">Choose Your Celestial Destination</p>
+            <div class="destinations-grid">
+                <div class="destination-card" data-destination="luna">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?w=800&h=600&fit=crop" alt="Luna Suites">
+                        <div class="card-overlay"></div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Luna Suites</h3>
+                        <p class="card-description">Earthrise View, Gravity Spa, Crater Dining</p>
+                        <div class="card-explore">Explore →</div>
+                    </div>
+                </div>
+                <div class="destination-card" data-destination="mars">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=800&h=600&fit=crop" alt="Mars Haven">
+                        <div class="card-overlay"></div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Mars Haven</h3>
+                        <p class="card-description">Red-Dust Luxury Domes, AI Concierge</p>
+                        <div class="card-explore">Explore →</div>
+                    </div>
+                </div>
+                <div class="destination-card" data-destination="orbit">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=800&h=600&fit=crop" alt="Orbital Resort">
+                        <div class="card-overlay"></div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Orbital Resort</h3>
+                        <p class="card-description">Zero-G Suites, Spacewalk Balcony</p>
+                        <div class="card-explore">Explore →</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="section-title">Premium Experience</h2>
+            <p class="section-subtitle">Unparalleled Luxury in the Cosmos</p>
+            <div class="features-grid">
+                <div class="feature-tile">
+                    <div class="feature-icon icon-pod"></div>
+                    <h3>Zero-Gravity Living Pods</h3>
+                    <p>Experience true weightlessness in our state-of-the-art living quarters designed for maximum comfort in zero gravity.</p>
+                </div>
+                <div class="feature-tile">
+                    <div class="feature-icon icon-ai"></div>
+                    <h3>AI Butler (AstroBot)</h3>
+                    <p>Your personal AI concierge, available 24/7 to fulfill every need and enhance your interstellar journey.</p>
+                </div>
+                <div class="feature-tile">
+                    <div class="feature-icon icon-teleport"></div>
+                    <h3>Teleportation Transfer Arrival</h3>
+                    <p>Instant arrival via quantum teleportation technology. No long journeys, just instant transportation to your destination.</p>
+                </div>
+                <div class="feature-tile">
+                    <div class="feature-icon icon-dining"></div>
+                    <h3>Quantum Cuisine Dining</h3>
+                    <p>Molecular gastronomy meets cosmic ingredients. Experience dining like never before with our quantum-enhanced cuisine.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Section -->
+    <section id="booking" class="booking">
+        <div class="container">
+            <h2 class="section-title">Book Your Journey</h2>
+            <p class="section-subtitle">Reserve Your Place Among the Stars</p>
+            <div class="booking-form-container">
+                <form id="booking-form" class="booking-form">
+                    <!-- Step 1: Destination Selection -->
+                    <div class="form-step">
+                        <label class="step-label">Select Your Destination</label>
+                        <div class="destination-selector">
+                            <div class="booking-destination-card" data-destination="luna">
+                                <div class="booking-card-image">
+                                    <img src="https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?w=400&h=300&fit=crop" alt="Luna Suites">
+                                    <div class="booking-card-check">
+                                        <span class="check-icon">✓</span>
+                                    </div>
+                                </div>
+                                <div class="booking-card-content">
+                                    <h3>Luna Suites</h3>
+                                    <p class="booking-card-tagline">Earthrise Views</p>
+                                    <p class="booking-card-price">$1,200<span>/night</span></p>
+                                </div>
+                            </div>
+                            <div class="booking-destination-card" data-destination="mars">
+                                <div class="booking-card-image">
+                                    <img src="https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=400&h=300&fit=crop" alt="Mars Haven">
+                                    <div class="booking-card-check">
+                                        <span class="check-icon">✓</span>
+                                    </div>
+                                </div>
+                                <div class="booking-card-content">
+                                    <h3>Mars Haven</h3>
+                                    <p class="booking-card-tagline">Red-Dust Luxury</p>
+                                    <p class="booking-card-price">$2,000<span>/night</span></p>
+                                </div>
+                            </div>
+                            <div class="booking-destination-card" data-destination="orbit">
+                                <div class="booking-card-image">
+                                    <img src="https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=400&h=300&fit=crop" alt="Orbital Resort">
+                                    <div class="booking-card-check">
+                                        <span class="check-icon">✓</span>
+                                    </div>
+                                </div>
+                                <div class="booking-card-content">
+                                    <h3>Orbital Resort</h3>
+                                    <p class="booking-card-tagline">Zero-G Suites</p>
+                                    <p class="booking-card-price">$3,500<span>/night</span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <select id="destination" name="destination" required style="display: none;">
+                            <option value="">Select Destination</option>
+                            <option value="luna">Luna Suites - $1,200/night</option>
+                            <option value="mars">Mars Haven - $2,000/night</option>
+                            <option value="orbit">Orbital Resort - $3,500/night</option>
+                        </select>
+                    </div>
+
+                    <!-- Step 2: Date Selection -->
+                    <div class="form-step">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="checkin">Check-In</label>
+                                <div class="date-input-wrapper">
+                                    <input type="text" id="checkin-display" class="date-display" readonly placeholder="Select check-in date" required>
+                                    <input type="date" id="checkin" name="checkin" required style="display: none;">
+                                    <button type="button" class="calendar-trigger" data-target="checkin">
+                                        <span class="calendar-icon"></span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="checkout">Check-Out</label>
+                                <div class="date-input-wrapper">
+                                    <input type="text" id="checkout-display" class="date-display" readonly placeholder="Select check-out date" required>
+                                    <input type="date" id="checkout" name="checkout" required style="display: none;">
+                                    <button type="button" class="calendar-trigger" data-target="checkout">
+                                        <span class="calendar-icon">📅</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="nights-display" id="nights-display" style="display: none;">
+                            <span id="nights-count">0</span> nights
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Travelers & Class -->
+                    <div class="form-step">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="travelers">Number of Travelers</label>
+                                <input type="number" id="travelers" name="travelers" min="1" max="10" value="1" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="cabin-class">Cabin Class</label>
+                                <select id="cabin-class" name="cabin-class" required>
+                                    <option value="standard" selected>Standard Gravity (×1.0)</option>
+                                    <option value="luxury">Zero-G Luxury (×1.5)</option>
+                                    <option value="elite">Interstellar Elite (×2.25)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" placeholder="your.email@example.com">
+                        </div>
+                    </div>
+
+                    <div class="price-display">
+                        <div class="price-label">Total Price</div>
+                        <div class="price-value" id="total-price">$0</div>
+                    </div>
+                    <button type="submit" class="btn-primary btn-large">Confirm Booking</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <h2 class="section-title">About AstroStay</h2>
+            <div class="about-content">
+                <div class="about-separator"></div>
+                <p class="about-text">
+                    AstroStay represents the pinnacle of luxury space travel and interplanetary hospitality. 
+                    Founded on the vision that Earth is just the beginning, we offer unparalleled experiences 
+                    that combine cutting-edge technology with the timeless elegance of premium service.
+                </p>
+                <div class="about-separator"></div>
+                <p class="about-text">
+                    Our mission is to make the cosmos accessible to those who seek the extraordinary. 
+                    Each destination has been carefully curated to provide an immersive experience that 
+                    transcends the boundaries of traditional travel. From the serene Earthrise views on Luna 
+                    to the red-dust luxury of Mars, and the weightless wonder of our Orbital Resort, 
+                    AstroStay offers a new paradigm in hospitality.
+                </p>
+                <div class="about-separator"></div>
+                <p class="about-text">
+                    We believe that the future of travel lies beyond our atmosphere, and we're here to 
+                    make that future available today. Join us in redefining what it means to explore, 
+                    relax, and experience luxury in the endless expanse of space.
+                </p>
+                <div class="about-separator"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2 class="section-title">Get in Touch</h2>
+            <p class="section-subtitle">Questions? We're Here to Help</p>
+            <div class="contact-form-container">
+                <form id="contact-form" class="contact-form">
+                    <div class="form-group">
+                        <input type="text" id="contact-name" name="name" placeholder="Your Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="contact-email" name="email" placeholder="Your Email" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea id="contact-message" name="message" rows="5" placeholder="Your Message" required></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary btn-large">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p class="footer-motto">AstroStay — Earth Is Just the Beginning.</p>
+            <p class="footer-copyright">&copy; 2024 AstroStay. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Destination Overview Modal -->
+    <div id="destination-modal" class="modal destination-modal">
+        <div class="modal-content destination-modal-content">
+            <span class="modal-close destination-close">&times;</span>
+            <div class="destination-hero">
+                <div id="destination-hero-image" class="destination-hero-image"></div>
+                <div class="destination-hero-overlay">
+                    <h2 id="destination-name" class="destination-name"></h2>
+                    <p id="destination-tagline" class="destination-tagline"></p>
+                    <div class="destination-price-badge">
+                        <span id="destination-price-value" class="price-amount"></span>
+                        <span class="price-per">per night</span>
+                    </div>
+                </div>
+            </div>
+            <div class="destination-content">
+                <div class="destination-info-grid">
+                    <div class="info-item">
+                        <div class="info-icon icon-travel"></div>
+                        <div class="info-details">
+                            <div class="info-label">Travel Time</div>
+                            <div id="destination-travel-time" class="info-value"></div>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon icon-time"></div>
+                        <div class="info-details">
+                            <div class="info-label">Best Time</div>
+                            <div id="destination-best-time" class="info-value"></div>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon icon-capacity"></div>
+                        <div class="info-details">
+                            <div class="info-label">Capacity</div>
+                            <div id="destination-capacity" class="info-value"></div>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon icon-rating"></div>
+                        <div class="info-details">
+                            <div class="info-label">Rating</div>
+                            <div id="destination-rating" class="info-value"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="destination-description">
+                    <h3>About This Destination</h3>
+                    <p id="destination-description-text"></p>
+                </div>
+                <div class="destination-features">
+                    <h3>Key Features</h3>
+                    <ul id="destination-features-list" class="features-list"></ul>
+                </div>
+                <div class="destination-amenities">
+                    <h3>Amenities Included</h3>
+                    <div id="destination-amenities-grid" class="amenities-grid"></div>
+                </div>
+                <div class="destination-experiences">
+                    <h3>Special Experiences</h3>
+                    <div id="destination-experiences-list" class="experiences-list"></div>
+                </div>
+                <div class="destination-actions">
+                    <button class="btn-primary btn-large" id="destination-book-btn" onclick="bookFromDestination()">Book Now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Calendar Modal -->
+    <div id="calendar-modal" class="modal calendar-modal">
+        <div class="modal-content calendar-modal-content">
+            <span class="modal-close calendar-close">&times;</span>
+            <div class="calendar-header">
+                <button class="calendar-nav-btn" id="calendar-prev-month">←</button>
+                <h3 id="calendar-month-year" class="calendar-month-year"></h3>
+                <button class="calendar-nav-btn" id="calendar-next-month">→</button>
+            </div>
+            <div class="calendar-weekdays">
+                <div class="calendar-weekday">Sun</div>
+                <div class="calendar-weekday">Mon</div>
+                <div class="calendar-weekday">Tue</div>
+                <div class="calendar-weekday">Wed</div>
+                <div class="calendar-weekday">Thu</div>
+                <div class="calendar-weekday">Fri</div>
+                <div class="calendar-weekday">Sat</div>
+            </div>
+            <div id="calendar-grid" class="calendar-grid"></div>
+            <div class="calendar-footer">
+                <div class="calendar-legend">
+                    <div class="legend-item">
+                        <span class="legend-dot legend-today"></span>
+                        <span>Today</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-dot legend-selected"></span>
+                        <span>Selected</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-dot legend-range"></span>
+                        <span>Range</span>
+                    </div>
+                </div>
+                <button type="button" class="btn-secondary" id="calendar-clear">Clear</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
